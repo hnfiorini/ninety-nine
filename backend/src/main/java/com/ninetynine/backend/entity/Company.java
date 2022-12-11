@@ -1,25 +1,41 @@
 package com.ninetynine.backend.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 public class Company {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
     private String name;
-    private String sharePrice;
 
-    Company(String name, String sharePrice) {
+    public Company(String id, String name) {
+        this.id = id;
         this.name = name;
-        this.sharePrice = sharePrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Company company = (Company) o;
+        return id != null && Objects.equals(id, company.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
